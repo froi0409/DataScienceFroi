@@ -2,7 +2,10 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+import matplotlib as mpl
 
-chart_data = pd.DataFrame(np.random.randn(20,3), columns=['a','b','c'])
+# insertamos el título de la interfaz gráfica
+st.title("Proyecto 2 - Machine Learning")
+st.markdown("**Seleccione alguna de las opciones ubicadas en la parte izquierda del sitio**")
 
-st.line_chart(chart_data)
+
