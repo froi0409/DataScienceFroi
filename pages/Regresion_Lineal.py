@@ -11,13 +11,14 @@ from PIL import Image
 ### Definimos las funciones que utilizaremos
 
 ## Función que nos sirve para llevar a cabo las operaciones
-def operar_datos(data, parametro_x, parametro_y):
+def operar_datos(data, parametro_x, parametro_y, entrada_prediccion):
     # Obtenemos los parametros de x, y
     x = np.asarray(data[parametro_x]).reshape(-1,1)
     y = data[parametro_y]
 
     regr = linear_model.LinearRegression()
     regr.fit(x,y)
+    y_pred = regr.predict(x)
 
     # Agregamos la gráfica de puntos 
     with st.expander('Gráfica de Puntos:'):
@@ -25,6 +26,7 @@ def operar_datos(data, parametro_x, parametro_y):
         st.text('X: ' + parametro_x)
         st.text('Y: ' + parametro_y)
         plt.scatter(x, y, color='green')
+        plt.plot(x, y_pred, color='red')
         plt.savefig('puntos.png')
         plt.close()
         
@@ -34,10 +36,20 @@ def operar_datos(data, parametro_x, parametro_y):
     # Agregamos la funcionalidad de definir función de tendencia
     with st.expander('Función de Tendencia:'):
         st.text('Función de tendencia: ')
+        # Obtenemos dos puntos
+        # y2, y1, m
+        y1 = regr.predict([[0]])
+        y2 = regr.predict([[5]])
+
+        m = (y2 - y1)/(5-0)
+        st.text('Pendiente: ' + str(m).replace('[','').replace(']',''))
+        st.latex('Ecuación: ' + str(m).replace('[','').replace(']','') + 'x' + ' + (' + str(y1).replace('[','').replace(']','') +')')
 
     # Agregamos la funcionalidad de predicción de la tendencia
-    with st.expander('Predicción de Tendencia:'):
-        st.text('Predicción de Tendencia')
+    if entrada_prediccion:
+        with st.expander('Predicción de Tendencia:'):
+            prediccion = regr.predict([[entrada_prediccion]])
+            st.text('La predicción a ' + str(entrada_prediccion) + ' (unidades de tiempo) es: ' + str(prediccion))
 
 
 ##Funcion que obtiene el csv e identifica la coleccion de datos a utilizar
@@ -77,13 +89,18 @@ def procesar_datos():
         with col_2:
             param_y = st.selectbox('Parametro Y:', data.columns)
         
+        check_predict = st.checkbox('¿Desea Realizar una Predicción?')
+        entrada_prediccion = 0
+        if check_predict:
+            entrada_prediccion = st.number_input('Ingresa las unidades de tiempo que se usarán para la predicción:')    
+
         btn_procesar = st.button('Procesar Datos')
         
         with st.expander('Tabla de Datos'):
             st.write(data)
         
         if btn_procesar:
-            operar_datos(data, param_x, param_y)
+            operar_datos(data, param_x, param_y, entrada_prediccion)
 
 
 
