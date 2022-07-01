@@ -38,7 +38,7 @@ def procesar_datos(operacion):
         st.write(data)
         st.text("Se ejecutará la siguiente operación: " + operacion)
         for x in data.columns:
-            st.text(x)
+            st.checkbox(x)
 
 
 
