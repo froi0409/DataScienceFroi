@@ -1,4 +1,5 @@
 # Importamos librerías a utilizar en esta aplicación
+from matplotlib.pyplot import text
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -6,7 +7,7 @@ import matplotlib as mpl
 import os
 
 ### Definimos las funciones que utilizaremos
-def procesar_datos():
+def procesar_datos(operacion):
     if upload_file is not None:
         # Obtenemos la extensión del archivo
         split_tup = os.path.splitext(upload_file.name)
@@ -19,15 +20,12 @@ def procesar_datos():
 
         # Identificamos la extensión del archivo
         if extension == '.csv':
-            st.text('Se encontró un archivo csv')
             bandera = True
             data = pd.read_csv(upload_file)
         elif extension == '.json':
-            st.text('Se encontró un archivo json')
             bandera = True
             data = pd.read_json(upload_file)
         elif extension == '.xlsx' or extension == '.xls':
-            st.text('Se encontró un archivo xlsx o xls')
             bandera = True
             data = pd.read_excel(upload_file)
         else:
@@ -35,9 +33,13 @@ def procesar_datos():
     else:
         st.text('Para realizar un análisis, primero debe seleccionar un archivo')
     
-    # Si bandera es verdadero, es porque si se pudo llevar a cabo el análisis del archivo
+    # Si bandera tiene un valor verdadero, es porque si se pudo llevar a cabo el análisis del archivo
     if bandera:
         st.write(data)
+        st.text("Se ejecutará la siguiente operación: " + operacion)
+        for x in data.columns:
+            st.text(x)
+
 
 
 
@@ -45,6 +47,7 @@ def procesar_datos():
 # Colocamos el título de la sección
 st.title('Regresión Lineal')
 
+#Utilizamos columnas para separar el upload file del selectbox
 col_1, col_2 = st.columns(2)
 
 with col_1:
@@ -57,7 +60,7 @@ button_process= st.button('procesar')
 
 
 if button_process:
-    procesar_datos()
+    procesar_datos(operacion)
 
 
 
