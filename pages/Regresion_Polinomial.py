@@ -1,5 +1,4 @@
 # Importamos librerías a utilizar en esta aplicación
-from statistics import LinearRegression, linear_regression
 from matplotlib.pyplot import text
 import streamlit as st
 import pandas as pd
