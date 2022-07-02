@@ -6,6 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 from sklearn import linear_model
+from sklearn.preprocessing import PolynomialFeatures
 from PIL import Image
 
 ### Definimos las funciones que utilizaremos
