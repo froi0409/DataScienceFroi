@@ -4,5 +4,3 @@ matplotlib
 seaborn
 streamlit
 sklearn
-sklearn.linear_model
-LinearRegression
