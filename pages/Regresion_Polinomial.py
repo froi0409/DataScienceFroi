@@ -6,7 +6,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import os
-from sklearn.linear_model import LinearRegression 
+from sklearn import linear_model 
 from sklearn.preprocessing import PolynomialFeatures 
 from PIL import Image
 
@@ -21,7 +21,7 @@ def operar_datos(data, parametro_x, parametro_y, entrada_prediccion, grado_polin
     polynomial_features = PolynomialFeatures(degree=grado_polinomio)
     x_transform = polynomial_features.fit_transform(x)
 
-    regresion_lineal = LinearRegression()
+    regresion_lineal = linear_model.LinearRegression()
 
     #model = linear_model.LinearRegression().fit(x_transform, y)
     regresion_lineal.fit(x_transform, y)
