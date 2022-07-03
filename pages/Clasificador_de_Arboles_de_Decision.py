@@ -135,10 +135,11 @@ def procesar_datos():
             st.image(image)
 
         if btn_predecir:
-            st.text('La predicción para la entrada: ' + prediccion + ' es:')
-            prediction = [float(i) for i in prediccion.split(',')]
-            predicted = clf.predict([prediction])
-            st.text(predicted)
+            with st.expander('Resultado de la Predicción: '):
+                st.text('La predicción para la entrada: ' + prediccion + ' es:')
+                prediction = [float(i) for i in prediccion.split(',')]
+                predicted = clf.predict([prediction])
+                st.text(predicted)
 
 
 
