@@ -86,26 +86,26 @@ def procesar_datos():
 
             # Realizamos el modelo
             clf = DecisionTreeClassifier().fit(tuples,resultado_encoded)
-            #plot_tree(clf, filled=True)
-            #plt.savefig('prueba.png')
+            plot_tree(clf, filled=True)
+            plt.savefig('clasiArbol.png')
 
             # exportar el modelo a archivo .dot
-            with open(r"clasiArbol.dot", 'w') as f:
-                f = tree.export_graphviz(clf,
-                                        out_file=f,
-                                        max_depth = 7,
-                                        impurity = True,
-                                        #feature_names = list(tuples.drop(['top'], axis=1)),
-                                        #class_names = ['No', 'N1 Billboard'],
-                                        rounded = True,
-                                        filled= True 
-                                        )
+            # with open(r"clasiArbol.dot", 'w') as f:
+            #    f = tree.export_graphviz(clf,
+            #                            out_file=f,
+            #                            max_depth = 7,
+            #                            impurity = True,
+            #                            #feature_names = list(tuples.drop(['top'], axis=1)),
+            #                            #class_names = ['No', 'N1 Billboard'],
+            #                            rounded = True,
+            #                            filled= True 
+            #                            )
             # dot_code = f
             
 
             # Convertir el archivo .dot a png para poder visualizarlo
-            check_call(['dot','-Tpng',r'clasiArbol.dot','-o',r'clasiArbol.png'])
-            PImage("clasiArbol.png")
+            # check_call(['dot','-Tpng',r'clasiArbol.dot','-o',r'clasiArbol.png'])
+            # PImage("clasiArbol.png")
 
             #for i in range(len(cols_evaluar)):
             #    st.text(cols_evaluar[i])
