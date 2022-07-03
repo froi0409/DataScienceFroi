@@ -1,4 +1,5 @@
 # Importamos librerías a utilizar en esta aplicación
+from click import confirm
 from matplotlib.pyplot import text
 import streamlit as st
 import pandas as pd
@@ -21,7 +22,6 @@ from IPython.display import Image as PImage
 from subprocess import check_call
 
 ### Definimos las funciones que utilizaremos
-
 
 ## Función que obtiene el archivo e identifica la colección de datos a utilizar
 def procesar_datos():
@@ -56,70 +56,90 @@ def procesar_datos():
     cols_encoded = list()
     dot_code = ''
     if bandera:
-        resultado = st.selectbox('Seleccione la columna que será utilizada como el resultado', data.columns)
-        confirmar_resultado = st.button('Confirmar')
-        
+        name_last_column = str
+        for x in data:
+            name_last_column = str(x)
+
         # Si se presiona el botón de confirmación, se inicia el análisis
-        if confirmar_resultado:
-            col_resultado = np.asarray(data[resultado]).reshape(-1,1)
-            for x in data:
-                if str(resultado) != str(x):
-                    col = np.asarray(data[str(x)]).reshape(-1,1)
-                    cols_evaluar.append(col)
-            
-            # Creamos un label enconder
-            le = preprocessing.LabelEncoder()
-            
-            # Convertimos los strings de los arreglos en números
-            for i in range(len(cols_evaluar)):
-                cols_encoded.append(le.fit_transform(cols_evaluar[i]))
+        #if confirmar_resultado:
+        col_resultado = np.asarray(data[name_last_column]).reshape(-1,1)
+        for x in data:
+            if str(name_last_column) != str(x):
+                col = np.asarray(data[str(x)]).reshape(-1,1)
+                cols_evaluar.append(col)
+        
+        # Creamos un label enconder
+        le = preprocessing.LabelEncoder()
+        
+        # Convertimos los strings de los arreglos en números
+        for i in range(len(cols_evaluar)):
+            cols_encoded.append(le.fit_transform(cols_evaluar[i]))
 
-            resultado_encoded = le.fit_transform(col_resultado)
+        resultado_encoded = le.fit_transform(col_resultado)
 
-            # Combinamos los atributos en una lista de tuplas
-            tuples = []
-            for x in range(len(cols_encoded[0])):
-                fila = []
-                for i in range(len(cols_encoded)):
-                    fila.append(cols_encoded[i][x])
-                tuples.append(tuple(fila))
+        # Combinamos los atributos en una lista de tuplas
+        tuples = []
+        for x in range(len(cols_encoded[0])):
+            fila = []
+            for i in range(len(cols_encoded)):
+                fila.append(cols_encoded[i][x])
+            tuples.append(tuple(fila))
 
-            # Realizamos el modelo
-            clf = DecisionTreeClassifier().fit(tuples,resultado_encoded)
-            plot_tree(clf, filled=True)
-            plt.savefig('clasiArbol.png')
+        # Realizamos el modelo
+        clf = DecisionTreeClassifier().fit(tuples,resultado_encoded)
+        plot_tree(clf, filled=True)
+        plt.savefig('clasiArbol.png')
 
-            # exportar el modelo a archivo .dot
-            # with open(r"clasiArbol.dot", 'w') as f:
-            #    f = tree.export_graphviz(clf,
-            #                            out_file=f,
-            #                            max_depth = 7,
-            #                            impurity = True,
-            #                            #feature_names = list(tuples.drop(['top'], axis=1)),
-            #                            #class_names = ['No', 'N1 Billboard'],
-            #                            rounded = True,
-            #                            filled= True 
-            #                            )
-            # dot_code = f
-            
+        # exportar el modelo a archivo .dot
+        # with open(r"clasiArbol.dot", 'w') as f:
+        #    f = tree.export_graphviz(clf,
+        #                            out_file=f,
+        #                            max_depth = 7,
+        #                            impurity = True,
+        #                            #feature_names = list(tuples.drop(['top'], axis=1)),
+        #                            #class_names = ['No', 'N1 Billboard'],
+        #                            rounded = True,
+        #                            filled= True 
+        #                            )
+        # dot_code = f
+        
 
-            # Convertir el archivo .dot a png para poder visualizarlo
-            # check_call(['dot','-Tpng',r'clasiArbol.dot','-o',r'clasiArbol.png'])
-            # PImage("clasiArbol.png")
+        # Convertir el archivo .dot a png para poder visualizarlo
+        # check_call(['dot','-Tpng',r'clasiArbol.dot','-o',r'clasiArbol.png'])
+        # PImage("clasiArbol.png")
 
-            #for i in range(len(cols_evaluar)):
-            #    st.text(cols_evaluar[i])
+        #for i in range(len(cols_evaluar)):
+        #    st.text(cols_evaluar[i])
 
+        st.text('Realizar una predicción. Ingrese los datos necesarios para predecir:')
+        prediccion = st.text_input('Ingrese los datos códificados separados por coma (puede consultar la tabla)')
+        btn_predecir = st.button('Realizar Predicción')
+        
 
         with st.expander('Tabla de Datos'):
-            st.write(data)
-            if confirmar_resultado:
-                st.text(tuples)
+            col_tabla, col_encoded, col_res = st.columns(3)
+            with col_tabla:
+                st.text('Tabla')
+                st.write(data)
             
-        if confirmar_resultado:
-            with st.expander('Clasificador de Arboles de Decisión:'):
-                image = Image.open('clasiArbol.png')
-                st.image(image)
+            with col_encoded:
+                st.text('Datos Encoded')
+                st.dataframe(tuples)
+            
+            with col_res:
+                st.text('Resultado Encoded')
+                st.dataframe(resultado_encoded)
+        
+        with st.expander('Clasificador de Arboles de Decisión:'):
+            image = Image.open('clasiArbol.png')
+            st.image(image)
+
+        if btn_predecir:
+            st.text('La predicción para la entrada: ' + prediccion + ' es:')
+            prediction = [float(i) for i in prediccion.split(',')]
+            predicted = clf.predict([prediction])
+            st.text(predicted)
+
 
 
 ## Inicio de la ejecución
