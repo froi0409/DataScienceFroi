@@ -54,6 +54,7 @@ def procesar_datos():
     col_resultado = any
     cols_evaluar = list()
     cols_encoded = list()
+    dot_code = ''
     if bandera:
         resultado = st.selectbox('Seleccione la columna que será utilizada como el resultado', data.columns)
         confirmar_resultado = st.button('Confirmar')
@@ -97,11 +98,14 @@ def procesar_datos():
                                         #feature_names = list(tuples.drop(['top'], axis=1)),
                                         #class_names = ['No', 'N1 Billboard'],
                                         rounded = True,
-                                        filled= True )
-                    
+                                        filled= True 
+                                        )
+            # dot_code = f
+            
+
             # Convertir el archivo .dot a png para poder visualizarlo
             check_call(['dot','-Tpng',r'clasiArbol.dot','-o',r'clasiArbol.png'])
-            #PImage("tree1.png")
+            PImage("clasiArbol.png")
 
             #for i in range(len(cols_evaluar)):
             #    st.text(cols_evaluar[i])
