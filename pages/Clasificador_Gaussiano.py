@@ -1,14 +1,4 @@
 # Importamos librerías a utilizar en esta aplicación
-from click import confirm
-from matplotlib.pyplot import text
-import streamlit as st
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-import os
-from sklearn import linear_model
-from PIL import Image
-# Importamos librerías a utilizar en esta aplicación
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -113,7 +103,7 @@ def procesar_datos():
             with st.expander('Resultado de la Predicción: '):
                 st.text('La predicción para la entrada: ' + prediccion + ' es:')
                 prediction = [float(i) for i in prediccion.split(',')]
-                predicted = clf.predict([prediction])
+                predicted = str(le.inverse_transform(clf.predict([prediction]))).replace('[','').replace(']','').replace('\"','').replace('\'','')
                 st.text(predicted)
 
 
