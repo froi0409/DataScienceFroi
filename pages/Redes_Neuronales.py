@@ -79,7 +79,7 @@ def procesar_datos():
             tuples.append(tuple(fila))
 
         # Realizamos el modelo
-        x_train, x_test, y_train, y_text = train_test_split(tuples, resultado_encoded, test_size=0.2)
+        x_train, x_test, y_train, y_test = train_test_split(tuples, resultado_encoded, test_size=0.2)
 
         scaler = preprocessing.StandardScaler().fit(x_train)
         x_train = scaler.transform(x_train)
