@@ -87,6 +87,8 @@ def procesar_datos():
 
         # Realizamos el modelo
         clf = DecisionTreeClassifier().fit(tuples,resultado_encoded)
+        plt.subplots(figsize=(12,12))
+        plt.text(.5, -0.025, "Decisiones", style="italic", fontsize=8, ha='center', color='red')
         plot_tree(clf, filled=True)
         plt.savefig('clasiArbol.png')
 
