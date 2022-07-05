@@ -138,7 +138,7 @@ def procesar_datos():
             with st.expander('Resultado de la Predicción: '):
                 st.text('La predicción para la entrada: ' + prediccion + ' es:')
                 prediction = [float(i) for i in prediccion.split(',')]
-                predicted = clf.predict([prediction])
+                predicted = str(le.inverse_transform(clf.predict([prediction]))).replace('[','').replace(']','').replace('\"','').replace('\'','')
                 st.text(predicted)
 
 
